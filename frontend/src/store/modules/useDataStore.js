@@ -58,6 +58,13 @@ export const useDataStore = defineStore("appData", () => {
         return count;
     }
 
+    // delSomeCode 全局删除某个code
+    const delSomeCode = (code) => {
+        appData.value.forEach((col) => {
+            col.items = col.items.filter((item) => item.code !== code);
+        });
+    }
+
 
     return {
         appData,
@@ -67,6 +74,7 @@ export const useDataStore = defineStore("appData", () => {
         maxItemCount,
         codeSet,
         countCodeBefore,
+        delSomeCode,
     };
 }, {
     persist: true

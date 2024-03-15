@@ -34,6 +34,18 @@
       </div>
     </div>
   </dialog>
+  <!-- 弹窗 | 删除code -->
+  <dialog id="my_modal_del_code" class="modal">
+    <div class="modal-box">
+      <h3 class="font-bold text-lg">确定全局删除此Code - <span style="color: red;">{{ delCode }}</span> ？</h3>
+      <div class="modal-action">
+        <form method="dialog">
+          <button class="btn btn-sm btn-error mr-2" @click="delSomeCodeOk">确定删除</button>
+          <button class="btn btn-sm" @click="delSomeCodeCancel">关闭</button>
+        </form>
+      </div>
+    </div>
+  </dialog>
 
   <div class="content p-5 flex flex-row flex-nowrap justify-start items-start gap-2">
     <div class="overflow-x-auto overflow-y-auto h-full">
@@ -66,6 +78,20 @@
 
     <div class="card">
       <button :onClick="addNewCol" class="btn btn-xs btn-primary text-nowrap">新增一列</button>
+      <div class="dropdown dropdown-bottom dropdown-end">
+        <button class="btn btn-xs btn-error text-nowrap mt-2">全局删除code</button>
+        <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
+          <label class="input input-bordered input-xs flex items-center gap-2 mb-2">
+              <input type="text" class="grow" placeholder="Search" v-model="searchCodeValue" />
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4 opacity-70"><path fill-rule="evenodd" d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z" clip-rule="evenodd" /></svg>
+          </label>
+          <div style="max-height: calc(100vh - 200px);overflow: auto;">
+            <li class="border border-solid rounded-lg" v-for="(item, index) in codeSet" :class="{
+              'mt-1' : index !== 0,
+            }" @click="delSomeCode(item)"><a>{{ item }}</a></li>
+          </div>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
@@ -147,11 +173,24 @@ const setCurrTime = () => {
   newCol.title = hiddenTime.value ? getCurrentTimeStr() : getCurrentTimeStr('time');
 };
 
-onMounted(() => {
-  console.log(dataStore.countCodeBefore(11, "你好"));
+const searchCodeValue = ref("");
+const codeSet = computed(() => {
+  // dataStore.codeSet 根据搜索条件进行过滤
+  const result = new Set(Array.from(dataStore.codeSet).filter((code) => code.includes(searchCodeValue.value)));
+  return result;
 });
-
-
+const delCode = ref("");
+const delSomeCode = (code) => {
+  my_modal_del_code.showModal();
+  delCode.value = code;
+};
+const delSomeCodeOk = (code) => {
+  dataStore.delSomeCode(delCode.value);
+  delCode.value = "";
+};
+const delSomeCodeCancel = () => {
+  delCode.value = "";
+};
 </script>
 
 <style lang="less">
