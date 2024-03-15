@@ -53,7 +53,16 @@
         <thead>
           <tr>
             <th>#</th>
-            <th class="font-bold text-sm" v-for="col in dataStore.appData" @click="delCol(col.id)">{{ col.title }}</th>
+            <th class="font-bold text-sm" v-for="col in dataStore.appData">
+              <div class="flex items-center gap-1">
+                <span>{{ col.title }}</span>
+                <button class="btn btn-xs btn-error btn-circle" @click="delCol(col.id)">
+                  <svg t="1710522152275" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4285" width="21" height="21">
+                    <path d="M67.661 517.598a447.654 455.375 0 1 0 895.308 0 447.654 455.375 0 1 0-895.308 0Z" fill="transparent" p-id="4286"></path>
+                    <path d="M683.858 350.83H335.13c-4.4 0-8-3.6-8-8v-24.345c0-4.4 3.6-8 8-8h348.729c4.4 0 8 3.6 8 8v24.345c-0.001 4.4-3.601 8-8.001 8zM657.18 383.79h-34.698c0.033 0.515 0.056 1.034 0.056 1.557v267.779c0 33.728-27.596 61.324-61.324 61.324H457.909c-34.023 0-61.859-27.837-61.859-61.859V385.347c0-0.524 0.023-1.042 0.056-1.557H361.81c-6.6 0-12 5.4-12 12v360.012c0 6.6 5.4 12 12 12h295.37c6.6 0 12-5.4 12-12V395.79c0-6.6-5.4-12-12-12z" fill="#FFFFFF" p-id="4287"></path><path d="M511.333 251.135m-43.846 0a43.846 43.846 0 1 0 87.692 0 43.846 43.846 0 1 0-87.692 0Z" fill="#FFFFFF" p-id="4288"></path></svg>
+                </button>
+              </div>
+            </th>
           </tr>
         </thead> 
         <tbody>
@@ -70,7 +79,7 @@
         <tfoot>
           <tr>
             <th></th>
-            <th v-for="col in dataStore.appData" @click="delCol(col.id)">{{ col.title }}</th>
+            <th v-for="col in dataStore.appData">{{ col.title }}</th>
           </tr>
         </tfoot>
       </table>
@@ -80,15 +89,15 @@
       <button :onClick="addNewCol" class="btn btn-xs btn-primary text-nowrap">新增一列</button>
       <div class="dropdown dropdown-bottom dropdown-end">
         <button class="btn btn-xs btn-error text-nowrap mt-2">全局删除code</button>
-        <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
-          <label class="input input-bordered input-xs flex items-center gap-2 mb-2">
+        <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-32">
+          <label class="input input-bordered input-xs flex items-center gap-2 mb-2 w-full">
               <input type="text" class="grow" placeholder="Search" v-model="searchCodeValue" />
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4 opacity-70"><path fill-rule="evenodd" d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z" clip-rule="evenodd" /></svg>
           </label>
-          <div style="max-height: calc(100vh - 200px);overflow: auto;">
-            <li class="border border-solid rounded-lg" v-for="(item, index) in codeSet" :class="{
+          <div style="max-height: calc(100vh - 200px);overflow: auto;" class="w-full">
+            <li class="border border-solid rounded-lg w-full" v-for="(item, index) in codeSet" :class="{
               'mt-1' : index !== 0,
-            }" @click="delSomeCode(item)"><a>{{ item }}</a></li>
+            }" @click="delSomeCode(item)"><a class="w-full truncate block" :title="item">{{ item }}</a></li>
           </div>
         </ul>
       </div>
