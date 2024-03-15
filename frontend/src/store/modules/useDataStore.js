@@ -15,6 +15,10 @@ interface ColumnItem {
 export const useDataStore = defineStore("appData", () => {
     const appData = ref([]);
 
+    const setAppData = (data) => {
+        appData.value = data;
+    }
+
     const addColumn = (col) => {
         appData.value.push(col);
     }
@@ -96,6 +100,7 @@ export const useDataStore = defineStore("appData", () => {
 
     return {
         appData,
+        setAppData,
         addColumn,
         delColumnById,
         columnCount,
@@ -107,5 +112,5 @@ export const useDataStore = defineStore("appData", () => {
         appDataWithCountSorted,
     };
 }, {
-    persist: true
+    persist: false
 });

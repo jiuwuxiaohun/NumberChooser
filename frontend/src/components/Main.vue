@@ -100,6 +100,8 @@
 import { useDataStore } from "../store";
 import { getCurrentTimeStr, generateUUID, parseAndFormatDate } from "../utils";
 import { onMounted, reactive, ref, computed, nextTick } from "vue";
+import { EventsEmit } from "../../wailsjs/runtime";
+import { ConfigInit, ConfigSave } from "../../wailsjs/go/main/App";
 
 const dataStore = useDataStore();
 
@@ -137,8 +139,9 @@ const addNewCol = () => {
   initNewCol();
   my_modal_add_col.showModal()
 };
-const addNewColOk = () => {
+const addNewColOk = async () => {
   dataStore.addColumn({ ...newCol });
+  await ConfigSave(dataStore.appData);
 };
 // #endregion
 
@@ -148,26 +151,25 @@ const delCol = (id) => {
   my_modal_del_col.showModal()
   delColId.value = id;
 };
-const delColOk = () => {
+const delColOk = async () => {
   dataStore.delColumnById(delColId.value);
   delColId.value = "";
+
+  await ConfigSave(dataStore.appData);
 };
 // #endregion
 
 const hiddenTime = ref(true);
 const newColTitleOld = ref("");
 const hiddenTimeToggle = () => {
-  nextTick(() => {
-    console.log(hiddenTime.value);
-    if (hiddenTime.value) {
-      newColTitleOld.value = newCol.title;
-      const newString = parseAndFormatDate(newColTitleOld.value, { year: 'numeric', month: 'long', day: 'numeric' });
-      console.log(newString);
-      if (!newString) return;
+  if (hiddenTime.value) {
+    newColTitleOld.value = newCol.title;
+    const newString = parseAndFormatDate(newColTitleOld.value, { year: 'numeric', month: 'long', day: 'numeric' });
+    console.log(newString);
+    if (!newString) return;
 
-      newCol.title = newString.replace('年', '-').replace('月', '-').replace('日', '');
-    }
-  })
+    newCol.title = newString.replace('年', '-').replace('月', '-').replace('日', '');
+  }
 };
 const setCurrTime = () => {
   newCol.title = hiddenTime.value ? getCurrentTimeStr() : getCurrentTimeStr('time');
@@ -184,13 +186,28 @@ const delSomeCode = (code) => {
   my_modal_del_code.showModal();
   delCode.value = code;
 };
-const delSomeCodeOk = (code) => {
+const delSomeCodeOk = async (code) => {
   dataStore.delSomeCode(delCode.value);
   delCode.value = "";
+
+  await ConfigSave(dataStore.appData);
 };
 const delSomeCodeCancel = () => {
   delCode.value = "";
 };
+
+onMounted(async() => {
+  try {
+    const config = await ConfigInit();
+    if (config && config.length > 0) {
+      console.log("获取到本地配置文件", config);
+      dataStore.setAppData(config);
+    }
+  } catch (error) {
+    // 获取配置文件有错误 需要处理
+    console.log(error);
+  }
+});
 </script>
 
 <style lang="less">
