@@ -9,6 +9,7 @@ interface Column {
 interface ColumnItem {
     key: number;
     code: string;
+    count?: number;
 }
  */
 export const useDataStore = defineStore("appData", () => {
@@ -58,6 +59,33 @@ export const useDataStore = defineStore("appData", () => {
         return count;
     }
 
+    // appData的items中的code的数量 | 附加到appData的items中
+    const appDataWithCount = computed(() => {
+        return appData.value.map((col, colIndex) => {
+            return {
+                ...col,
+                items: col.items.map((item) => {
+                    return {
+                        ...item,
+                        count: countCodeBefore(colIndex, item.code)
+                    }
+                })
+            }
+        });
+    });
+
+    // appDataWithCount的items按照count排序
+    const appDataWithCountSorted = computed(() => {
+        return appDataWithCount.value.map((col) => {
+            return {
+                ...col,
+                items: col.items.sort((a, b) => {
+                    return b.count - a.count;
+                })
+            }
+        });
+    });
+
     // delSomeCode 全局删除某个code
     const delSomeCode = (code) => {
         appData.value.forEach((col) => {
@@ -75,6 +103,8 @@ export const useDataStore = defineStore("appData", () => {
         codeSet,
         countCodeBefore,
         delSomeCode,
+        appDataWithCount,
+        appDataWithCountSorted,
     };
 }, {
     persist: true

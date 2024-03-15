@@ -61,9 +61,9 @@
             <th>{{ rowIndex }}</th>
             <td class="text-right pr-5" v-for="colIndex in dataStore.columnCount">
               <span>
-                {{ (dataStore.appData[colIndex-1].items && dataStore.appData[colIndex-1].items.length && dataStore.appData[colIndex-1].items[rowIndex-1]) ? (temp = dataStore.appData[colIndex-1].items[rowIndex-1].code) : (temp = "") }}
+                {{ ((tempa = dataStore.appDataWithCountSorted[colIndex-1].items) && tempa.length && (tempb = tempa[rowIndex-1])) ? (tempc = tempb.code) : (tempc = "") }}
               </span>
-              <span v-if="temp && colIndex !== 1 && (ttemp = dataStore.countCodeBefore(colIndex-1, temp))" class="badge badge-sm badge-secondary ml-2">{{ ttemp }}</span>
+              <span v-if="tempc && colIndex !== 1 && tempb.count" class="badge badge-sm badge-secondary ml-2">{{ tempb.count }}</span>
             </td>
           </tr>
         </tbody> 
