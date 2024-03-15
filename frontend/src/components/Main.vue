@@ -51,7 +51,7 @@
               <span>
                 {{ (dataStore.appData[colIndex-1].items && dataStore.appData[colIndex-1].items.length && dataStore.appData[colIndex-1].items[rowIndex-1]) ? (temp = dataStore.appData[colIndex-1].items[rowIndex-1].code) : (temp = "") }}
               </span>
-              <span v-if="temp" class="badge badge-sm badge-secondary ml-2">{{ dataStore.countCodeBefore(colIndex-1, temp) }}</span>
+              <span v-if="temp && colIndex !== 1" class="badge badge-sm badge-secondary ml-2">{{ dataStore.countCodeBefore(colIndex-1, temp) }}</span>
             </td>
           </tr>
         </tbody> 
