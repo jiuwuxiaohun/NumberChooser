@@ -48,7 +48,7 @@
   </dialog>
 
   <div class="content p-5 flex flex-row flex-nowrap justify-start items-start gap-2">
-    <div class="overflow-x-auto overflow-y-auto h-full">
+    <div class="overflow-x-auto flex-1 overflow-y-auto h-full">
       <table class="table table-xs table-pin-rows h-full">
         <thead>
           <tr>
@@ -56,6 +56,7 @@
             <th class="font-bold text-sm" v-for="col in dataStore.appData">
               <div class="flex items-center gap-1">
                 <span>{{ col.title }}</span>
+                <!--删除按钮-->
                 <button class="btn btn-xs btn-error btn-circle" @click="delCol(col.id)">
                   <svg t="1710522152275" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4285" width="21" height="21">
                     <path d="M67.661 517.598a447.654 455.375 0 1 0 895.308 0 447.654 455.375 0 1 0-895.308 0Z" fill="transparent" p-id="4286"></path>
@@ -85,22 +86,37 @@
       </table>
     </div>
 
-    <div class="card">
+    <div class="card min-w-44">
       <button :onClick="addNewCol" class="btn btn-xs btn-primary text-nowrap">新增一列</button>
-      <div class="dropdown dropdown-bottom dropdown-end">
-        <button class="btn btn-xs btn-error text-nowrap mt-2">全局删除code</button>
-        <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-36">
-          <label class="input input-bordered input-xs flex items-center gap-2 mb-2 w-full">
-              <input type="text" class="grow" placeholder="Search" v-model="searchCodeValue" />
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4 opacity-70"><path fill-rule="evenodd" d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z" clip-rule="evenodd" /></svg>
-          </label>
-          <div style="max-height: calc(100vh - 200px);overflow: auto;" class="w-full">
-            <li class="border border-solid rounded-lg w-full" v-for="(item, index) in codeSet" :class="{
+
+      <div class="dropdown dropdown-bottom dropdown-end mt-2">
+        <label class="input input-bordered input-xs flex items-center gap-2 mb-2 w-full">
+          <input type="text" class="grow" placeholder="搜索删除" v-model="searchCodeValue" />
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4 opacity-70"><path fill-rule="evenodd" d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z" clip-rule="evenodd" /></svg>
+        </label>
+        <div v-if="searchCodeValue!=''" style="max-height: calc(100vh - 200px);overflow: auto;" class="w-full">
+          <p class="border border-solid rounded-lg w-full px-2" v-for="(item, index) in codeSet" :class="{
               'mt-1' : index !== 0,
-            }" @click="delSomeCode(item)"><a class="w-full truncate block" :title="item">{{ item }}</a></li>
-          </div>
-        </ul>
+            }" @click="delSomeCode(item)">
+            <a class="w-full truncate block" :title="item">{{ item }}</a>
+          </p>
+        </div>
       </div>
+
+      <!--<div class="dropdown dropdown-bottom dropdown-end">-->
+      <!--  <button class="btn btn-xs btn-error text-nowrap mt-2">全局删除code</button>-->
+      <!--  <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-36">-->
+      <!--    <label class="input input-bordered input-xs flex items-center gap-2 mb-2 w-full">-->
+      <!--        <input type="text" class="grow" placeholder="Search" v-model="searchCodeValue" />-->
+      <!--        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4 opacity-70"><path fill-rule="evenodd" d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z" clip-rule="evenodd" /></svg>-->
+      <!--    </label>-->
+      <!--    <div style="max-height: calc(100vh - 200px);overflow: auto;" class="w-full">-->
+      <!--      <li class="border border-solid rounded-lg w-full" v-for="(item, index) in codeSet" :class="{-->
+      <!--        'mt-1' : index !== 0,-->
+      <!--      }" @click="delSomeCode(item)"><a class="w-full truncate block" :title="item">{{ item }}</a></li>-->
+      <!--    </div>-->
+      <!--  </ul>-->
+      <!--</div>-->
     </div>
   </div>
 </template>
@@ -277,5 +293,10 @@ html, body, #app {
     display: flex;
     gap: 5px;
   }
+}
+
+.overflow-x-auto.flex-1.overflow-y-auto.h-full::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
 }
 </style>
