@@ -69,12 +69,14 @@
         <tbody>
           <tr v-for="rowIndex in dataStore.maxItemCount">
             <th>{{ rowIndex }}</th>
-            <td class="text-right pr-5" v-for="colIndex in dataStore.columnCount">
-              <span>
-                {{ ((tempa = dataStore.appDataWithCountSorted[colIndex-1].items) && tempa.length && (tempb = tempa[rowIndex-1])) ? (tempc = tempb.code) : (tempc = "") }}
-              </span>
-              <span v-if="tempc && colIndex !== 1 && tempb.count" class="badge badge-sm badge-secondary ml-2">{{ tempb.count }}</span>
-            </td>
+            <template  v-for="colIndex in dataStore.columnCount" >
+              <td class="text-right pr-5" v-if="filterCodeValue=='' || (filterCodeValue!='' && dataStore.appDataWithCountSorted[colIndex-1].items && (tempa = dataStore.appDataWithCountSorted[colIndex-1].items) && tempa.length && (tempb = tempa[rowIndex-1]) && tempb.code.indexOf(filterCodeValue)!==-1 ) ">
+                <span>
+                  {{ ((tempa = dataStore.appDataWithCountSorted[colIndex-1].items) && tempa.length && (tempb = tempa[rowIndex-1])) ? (tempc = tempb.code) : (tempc = "") }}
+                </span>
+                <span v-if="tempc && colIndex !== 1 && tempb.count" class="badge badge-sm badge-secondary ml-2">{{ tempb.count }}</span>
+              </td>
+            </template>
           </tr>
         </tbody> 
         <tfoot>
@@ -101,6 +103,13 @@
             <a class="w-full truncate block" :title="item">{{ item }}</a>
           </p>
         </div>
+      </div>
+
+      <div class="dropdown dropdown-bottom dropdown-end mt-2">
+        <label class="input input-bordered input-xs flex items-center gap-2 mb-2 w-full">
+          <input type="text" class="grow" placeholder="筛选查看" v-model="filterCodeValue" />
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4 opacity-70"><path fill-rule="evenodd" d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z" clip-rule="evenodd" /></svg>
+        </label>
       </div>
 
       <!--<div class="dropdown dropdown-bottom dropdown-end">-->
@@ -201,6 +210,7 @@ const setCurrTime = () => {
 };
 
 const searchCodeValue = ref("");
+const filterCodeValue = ref("");
 const codeSet = computed(() => {
   // dataStore.codeSet 根据搜索条件进行过滤
   const result = new Set(Array.from(dataStore.codeSet).filter((code) => code.includes(searchCodeValue.value)));
