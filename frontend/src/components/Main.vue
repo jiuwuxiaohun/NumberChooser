@@ -53,12 +53,12 @@
         <thead>
           <tr>
             <th>#</th>
-            <th class="font-bold text-sm" v-for="col in dataStore.appData">
-              <div class="flex items-center gap-1">
+            <th class="font-bold border text-sm" v-for="col in dataStore.appData">
+              <div class="flex  text-right gap-1">
                 <span>{{ col.title }}</span>
                 <!--删除按钮-->
                 <button class="btn btn-xs btn-error btn-circle" @click="delCol(col.id)">
-                  <svg t="1710522152275" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4285" width="21" height="21">
+                  <svg t="1710522152275" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4285" width="12" height="12">
                     <path d="M67.661 517.598a447.654 455.375 0 1 0 895.308 0 447.654 455.375 0 1 0-895.308 0Z" fill="transparent" p-id="4286"></path>
                     <path d="M683.858 350.83H335.13c-4.4 0-8-3.6-8-8v-24.345c0-4.4 3.6-8 8-8h348.729c4.4 0 8 3.6 8 8v24.345c-0.001 4.4-3.601 8-8.001 8zM657.18 383.79h-34.698c0.033 0.515 0.056 1.034 0.056 1.557v267.779c0 33.728-27.596 61.324-61.324 61.324H457.909c-34.023 0-61.859-27.837-61.859-61.859V385.347c0-0.524 0.023-1.042 0.056-1.557H361.81c-6.6 0-12 5.4-12 12v360.012c0 6.6 5.4 12 12 12h295.37c6.6 0 12-5.4 12-12V395.79c0-6.6-5.4-12-12-12z" fill="#FFFFFF" p-id="4287"></path><path d="M511.333 251.135m-43.846 0a43.846 43.846 0 1 0 87.692 0 43.846 43.846 0 1 0-87.692 0Z" fill="#FFFFFF" p-id="4288"></path></svg>
                 </button>
@@ -70,11 +70,14 @@
           <tr v-for="rowIndex in dataStore.maxItemCount">
             <th>{{ rowIndex }}</th>
             <template  v-for="colIndex in dataStore.columnCount" >
-              <td class="text-right pr-5" v-if="filterCodeValue=='' || (filterCodeValue!='' && dataStore.appDataWithCountSorted[colIndex-1].items && (tempa = dataStore.appDataWithCountSorted[colIndex-1].items) && tempa.length && (tempb = tempa[rowIndex-1]) && tempb.code.indexOf(filterCodeValue)!==-1 ) ">
+              <td class="text-right border pr-5" v-if="filterCodeValue=='' || (filterCodeValue!='' && dataStore.appDataWithCountSorted[colIndex-1].items && (tempa = dataStore.appDataWithCountSorted[colIndex-1].items) && tempa.length && (tempb = tempa[rowIndex-1]) && tempb.code.indexOf(filterCodeValue)!==-1 ) ">
                 <span>
                   {{ ((tempa = dataStore.appDataWithCountSorted[colIndex-1].items) && tempa.length && (tempb = tempa[rowIndex-1])) ? (tempc = tempb.code) : (tempc = "") }}
                 </span>
                 <span v-if="tempc && colIndex !== 1 && tempb.count" class="badge badge-sm badge-secondary ml-2">{{ tempb.count }}</span>
+              </td>
+              <td class="text-right border pr-5" v-else>
+                -
               </td>
             </template>
           </tr>
@@ -82,7 +85,15 @@
         <tfoot>
           <tr>
             <th></th>
-            <th v-for="col in dataStore.appData">{{ col.title }}</th>
+            <th class="border text-right" v-for="col in dataStore.appData">
+              <span>{{ col.title }}</span>
+              <!--删除按钮-->
+              <button class="btn btn-xs btn-error btn-circle" @click="delCol(col.id)">
+                <svg t="1710522152275" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4285" width="12" height="12">
+                  <path d="M67.661 517.598a447.654 455.375 0 1 0 895.308 0 447.654 455.375 0 1 0-895.308 0Z" fill="transparent" p-id="4286"></path>
+                  <path d="M683.858 350.83H335.13c-4.4 0-8-3.6-8-8v-24.345c0-4.4 3.6-8 8-8h348.729c4.4 0 8 3.6 8 8v24.345c-0.001 4.4-3.601 8-8.001 8zM657.18 383.79h-34.698c0.033 0.515 0.056 1.034 0.056 1.557v267.779c0 33.728-27.596 61.324-61.324 61.324H457.909c-34.023 0-61.859-27.837-61.859-61.859V385.347c0-0.524 0.023-1.042 0.056-1.557H361.81c-6.6 0-12 5.4-12 12v360.012c0 6.6 5.4 12 12 12h295.37c6.6 0 12-5.4 12-12V395.79c0-6.6-5.4-12-12-12z" fill="#FFFFFF" p-id="4287"></path><path d="M511.333 251.135m-43.846 0a43.846 43.846 0 1 0 87.692 0 43.846 43.846 0 1 0-87.692 0Z" fill="#FFFFFF" p-id="4288"></path></svg>
+              </button>
+            </th>
           </tr>
         </tfoot>
       </table>
